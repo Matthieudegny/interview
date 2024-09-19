@@ -1,20 +1,28 @@
 import React from "react";
-import { useGetListCards } from "../hooks/useGetListCards";
+import { Skeleton, Box } from "@mui/material";
 
-import Card from "./Card";
-import { Skeleton } from "@mui/material";
+// model
+import { CardProps } from "../model/model_card";
 
-const ListCards: React.FC = () => {
-  const { listCards, loading } = useGetListCards();
+// components
+import NasaCard from "./Card";
 
+const ListCards: React.FC<{
+  listCards: CardProps[];
+  loading: boolean;
+}> = ({ listCards, loading }) => {
   return (
-    <div
+    <Box
       style={{
+        // rappel sidebar width 20vw
+        width: "calc(80vw - 4vh)",
+        height: "calc(100vh - 4vh)",
+        marginLeft: "20vw",
+        overflowY: "auto",
+        padding: "2vh",
         display: "flex",
         flexWrap: "wrap",
-        width: "calc(100vw - 5vh)",
-        gap: "3vh",
-        padding: "3vh 0vh 3vh 3vh",
+        gap: "2vh",
       }}
     >
       {loading
@@ -27,15 +35,15 @@ const ListCards: React.FC = () => {
             />
           ))
         : listCards?.map((card) => (
-            <Card
-              key={card.date}
+            <NasaCard
+              key={card.id}
+              id={card.id}
               title={card.title}
-              date={card.date}
               explanation={card.explanation}
               url={card.url}
             />
           ))}
-    </div>
+    </Box>
   );
 };
 

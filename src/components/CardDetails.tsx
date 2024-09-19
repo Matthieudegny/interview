@@ -1,5 +1,7 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
+
 import {
   Box,
   Button,
@@ -9,17 +11,25 @@ import {
   CircularProgress,
   Typography,
 } from "@mui/material";
-import { useGetListCards } from "../hooks/useGetListCards"; // Adjust the import based on your structure
-import { useNavigate } from "react-router-dom";
-const CardDetails: React.FC = () => {
+import CardActionArea from "@mui/material/CardActionArea";
+
+// model
+import { CardProps } from "../model/model_card";
+
+const CardDetails: React.FC<{
+  listCards: CardProps[];
+  loading: boolean;
+}> = ({ listCards, loading }) => {
   const navigate = useNavigate();
-  const { date } = useParams<{ date: string }>();
-  const { listCards, loading } = useGetListCards(); // Assuming this hook returns the list of cards
 
-  // Find the card that matches the date
-  const card = listCards.find((card) => card.date === date);
+  const { id } = useParams<{ id: string }>();
 
-  console.log("card", card);
+  if (!id) {
+    return <Typography variant="h6">Card not found</Typography>;
+  }
+
+  //  je récupère la card qui correspond à la date
+  const card = listCards.find((card) => card.id === parseInt(id));
 
   if (loading) {
     return (
@@ -56,26 +66,51 @@ const CardDetails: React.FC = () => {
         onClick={() => navigate("/list-cards")}
         sx={{
           position: "absolute",
-          top: "10px",
-          right: "10px",
+          top: "2vh",
+          right: "2vh",
         }}
       >
-        Return to List
+        Retour à la liste
       </Button>
-      <Card style={{ display: "flex", flexDirection: "row", padding: "20px" }}>
-        <CardMedia
-          component="img"
-          image={card.url}
-          alt={card.title}
-          style={{ width: "40%", objectFit: "cover" }} // Image on the left
-        />
-        <CardContent style={{ width: "60%" }}>
-          <Typography variant="h5">{card.title}</Typography>
-          <Typography variant="subtitle1" color="text.secondary">
-            {card.date}
-          </Typography>
-          <Typography variant="body1">{card.explanation}</Typography>
-        </CardContent>
+      <Card
+        sx={{
+          width: "85vw",
+          backgroundColor: "rgb(18, 18, 18)",
+          color: "white",
+        }}
+      >
+        <CardActionArea
+          sx={{
+            height: "100%",
+            width: "100%",
+            display: "flex",
+            flexDirection: "row",
+            gap: "2vh",
+            padding: "2vh",
+          }}
+        >
+          <CardMedia
+            component="img"
+            image={card.url}
+            alt={card.title}
+            style={{ width: "40%", objectFit: "cover" }}
+          />
+          <CardContent style={{ width: "calc(60% - 2vh)" }}>
+            <Typography variant="h4">{card.title}</Typography>
+            <Typography variant="subtitle1" color="text.secondary">
+              {card.date}
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                fontSize: "1.2rem",
+                lineHeight: "2.5rem",
+              }}
+            >
+              {card.explanation}
+            </Typography>
+          </CardContent>
+        </CardActionArea>
       </Card>
     </Box>
   );

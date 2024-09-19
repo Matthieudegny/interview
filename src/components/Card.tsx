@@ -1,31 +1,36 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, CardContent, CardMedia, Typography } from "@mui/material";
-import MuiCard from "@mui/material/Card";
+import { CardContent, CardMedia, Typography } from "@mui/material";
+import Card from "@mui/material/Card";
+import CardActionArea from "@mui/material/CardActionArea";
 
 // model
 import { CardProps } from "../model/model_card";
 
-const Card: React.FC<CardProps> = ({ title, date, explanation, url }) => {
+const NasaCard: React.FC<CardProps> = ({ id, title, url }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/details/${date}`);
+    navigate(`/details/${id}`);
   };
 
   return (
-    <Box>
-      <MuiCard
-        onClick={handleClick}
-        style={{
-          cursor: "pointer",
-          width: "30.6vw",
-          maxHeight: "50vh",
-          minHeight: "50vh",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
+    <Card
+      onClick={handleClick}
+      sx={{
+        cursor: "pointer",
+        width: "calc(33% - 1vh)",
+        minWidth: "380px",
+        maxHeight: "50vh",
+        minHeight: "50vh",
+        display: "flex",
+        flexDirection: "column",
+        margin: 0,
+        backgroundColor: "rgb(18, 18, 18)",
+        color: "white",
+      }}
+    >
+      <CardActionArea sx={{ height: "100%", width: "100%" }}>
         <CardMedia
           sx={{
             height: "70%",
@@ -52,14 +57,10 @@ const Card: React.FC<CardProps> = ({ title, date, explanation, url }) => {
           >
             {title}
           </Typography>
-          {/* <Typography variant="body1" color="text.secondary">
-          {date}
-        </Typography>
-        <Typography variant="body2">{explanation}</Typography> */}
         </CardContent>
-      </MuiCard>
-    </Box>
+      </CardActionArea>
+    </Card>
   );
 };
 
-export default Card;
+export default NasaCard;
